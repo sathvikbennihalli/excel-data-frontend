@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import backendUrl from "./config";
 
 function App() {
   const [data, setData] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:3001/agents")
+    fetch(`${backendUrl}`)
       .then((res) => res.json())
       .then((data) => setData(data))
       .catch((err) => console.log(err));
@@ -28,7 +29,10 @@ function App() {
         </thead>
         <tbody>
           {data.map((d, i) => (
-            <tr key={i} style={(i % 2 === 0) ? tableRowEvenStyle : tableRowOddStyle}>
+            <tr
+              key={i}
+              style={i % 2 === 0 ? tableRowEvenStyle : tableRowOddStyle}
+            >
               <td style={tableCellStyle}>{d.agent_id}</td>
               <td style={tableCellStyle}>{d.first_name}</td>
               <td style={tableCellStyle}>{d.last_name}</td>
