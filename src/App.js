@@ -3,15 +3,26 @@ import backendUrl from "./config";
 
 function App() {
   const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    fetch(`${backendUrl}`)
-      .then((res) => res.json())
+    fetch(backendUrl)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data) => setData(data))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.error("Fetch error:", err);
+        setError(err.message);
+      });
   }, []);
 
   return (
     <div style={{ padding: "50px" }}>
+      {error && <p style={{ color: "red" }}>Error: {error}</p>}
       <table style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
           <tr>
