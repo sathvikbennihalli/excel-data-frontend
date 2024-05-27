@@ -11,7 +11,15 @@ function App() {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
-        return res.json();
+        // Attempt to log the raw response for debugging purposes
+        return res.text().then((text) => {
+          try {
+            return JSON.parse(text);
+          } catch (err) {
+            console.error("Failed to parse response as JSON:", text);
+            throw new Error("Invalid JSON response");
+          }
+        });
       })
       .then((data) => setData(data))
       .catch((err) => {
